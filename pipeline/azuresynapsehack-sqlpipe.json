@@ -1,0 +1,48 @@
+{
+	"name": "azuresynapsehack-sqlpipe",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "\n\nSELECT TOP 10\n\t\n\tCFD.claim_form_detail_code\t\t\tAS 'ClaimFIRNo'\n,\tCFD.injury_Name\t\t\t\t\t\tAS 'Injury'\n,\tCFD.isCashless\t\t\t\t\t\tAS 'ClaimType'\n,\tCFD.Claim_type_Code\t\t\t\t\tAS 'ClaimCategory'\n,\tCFD.billed\t\t\t\t\t\t\tAS 'AmountBilled'\n,\tCFD.net\t\t\t\t\t\t\t\tAS 'AmountNet'\n,\tCFD.Amount_paid\t\t\t\t\t\tAS 'AmountPaid'\n,\tCFD.Dr_name\t\t\t\t\t\t\tAS 'DoctorName'\n,\tCFD.Dr_City\t\t\t\t\t\t\tAS 'DoctorCity'\n,\tCFD.claim_form_detail_id\t\t\tAS 'ClaimFormDetailId'\n,\tCFD.claim_detail_id\t\t\t\t\tAS 'IntimationId'\n,\tCFD.hosp_id\t\t\t\t\t\t\tAS 'HospitalId'\n,\tCFD.claim_status_id\t\t\t\t\tAS 'ClaimStatusId'\n,\tCFD.place_of_service_id\t\t\t\tAs 'PlaceofServiceId' \n,\tCFD.date_service\t\t\t\t\tAS 'DateofService'\n,\tCFD.date_paid\t\t\t\t\t\tAS 'DatePaid'\n,\tCFD.date_received\t\t\t\t\tAS 'DateReceived'\n,\tCFD.date_of_Admit\t\t\t\t\tAS 'DateofAdmit'\n,\tCFD.injury_sustained_date\t\t\tAS 'DateofInjury' \n,\tCFD.document_dated\t\t\t\t\tAS 'DateofDocumentation'\n,\tCFD.date_of_Discharge\t\t\t\tAS 'DateofDischarge'\n,\tCFD.date_modified\t\t\t\t\tAS 'DateModified'\n,\tCFD.workflow_current_sequence_id\tAS 'WorkflowSequenceId'\n,\tCFD.member_detail_id\t\t\t\tAS 'MemberDetailId'\n,\tCFD.Class_of_Accommodation\t\t\tAS 'ClassofAccommodation'\n,\tCFD.Type_of_Hospitalization\t\t\tAS 'HospitalizationType'\n,\tE.name\t\t\t\t\t\t\t\tAS 'Corporate'\n,\tCFD.claim_form_detail_id\t\t\tAS 'ClaimId'\n\nFROM claim_form_details CFD\nINNER JOIN Member_details_tmp MDT ON MDT.member_detail_id = CFD.member_detail_id\nLEFT OUTER JOIN employers E ON E.employer_id = MDT.employer_id\nWHERE \n\tISNULL(CFD.parent_claim_form_id,0) <> 0 ",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "azuresynapsehackds",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "azuresynapsehackDSQL",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-05-05T05:09:03Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

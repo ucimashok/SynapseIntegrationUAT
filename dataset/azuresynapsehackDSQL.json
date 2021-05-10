@@ -1,0 +1,17 @@
+{
+	"name": "azuresynapsehackDSQL",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "sampleClaims"
+		},
+		"sqlPool": {
+			"referenceName": "uiapsynapsesqlpoolH",
+			"type": "SqlPoolReference"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 2",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE [dbo].[ClaimSummary]\n(\n    claimind int \n    ,claimamt DECIMAL(9,2)\n    , claimtype VARCHAR(10)\n    ,memberdetailid int\n)\n \nGO\n\nINSERT INTO Claimsummary\nselect 1 , 100,'C',101\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "uiapsynapsesqlpoolH",
+				"databaseName": "uiapsynapsesqlpoolH"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

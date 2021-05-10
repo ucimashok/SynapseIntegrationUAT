@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (50) [ClaimFIRNo]\n,[Injury]\n,[ClaimType]\n,[ClaimCategory]\n,[AmountBilled]\n,[AmountNet]\n,[AmountPaid]\n,[DoctorName]\n,[DoctorCity]\n,[ClaimFormDetailId]\n,[IntimationId]\n,[HospitalId]\n,[ClaimStatusId]\n,[PlaceofServiceId]\n,[DateofService]\n,[DatePaid]\n,[DateReceived]\n,[DateofAdmit]\n,[DateofInjury]\n,[DateofDocumentation]\n,[DateofDischarge]\n,[DateModified]\n,[WorkflowSequenceId]\n,[MemberDetailId]\n,[ClassofAccommodation]\n,[HospitalizationType]\n,[Corporate]\n,[ClaimId]\n FROM [dbo].[sampleClaims]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "uiapsynapsesqlpoolH",
+				"databaseName": "uiapsynapsesqlpoolH"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
