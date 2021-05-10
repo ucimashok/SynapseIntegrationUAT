@@ -1,0 +1,48 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "uiap-synapse-workspace"
+		},
+		"FileDemoServer_password": {
+			"value": ""
+		},
+		"GithubConnStorage_credential": {
+			"value": ""
+		},
+		"RemoteServer_password": {
+			"value": ""
+		},
+		"azuresynapsehacklinkedServer_connectionString": {
+			"value": ""
+		},
+		"uiap-synapse-uat1-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"uiap-synapse-workspace-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"FileDemoServer_properties_typeProperties_host": {
+			"value": "\\\\192.10.1.11\\Shares\\Fileshare\\Knowledge Base\\Nanthakumar\\Hackathon Data"
+		},
+		"FileDemoServer_properties_typeProperties_userId": {
+			"value": "nanthakumar.j@ubtiinc.com"
+		},
+		"GithubConnStorage_properties_typeProperties_username": {
+			"value": "jjnanthakumar"
+		},
+		"RemoteServer_properties_typeProperties_host": {
+			"value": "\\\\192.10.1.11\\Shares\\Fileshare\\Knowledge Base\\Nanthakumar\\Hackathon Data"
+		},
+		"RemoteServer_properties_typeProperties_userId": {
+			"value": "nanthakumar.j@ubtiinc.com"
+		},
+		"uiap-synapse-uat1-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://synaselakeuat1.dfs.core.windows.net"
+		},
+		"uiap-synapse-workspace-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://uiapsynapselake.dfs.core.windows.net"
+		}
+	}
+}

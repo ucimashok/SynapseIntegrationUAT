@@ -1,0 +1,571 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Workspace name",
+			"defaultValue": "uiap-synapse-workspace"
+		},
+		"FileDemoServer_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'FileDemoServer'"
+		},
+		"GithubConnStorage_credential": {
+			"type": "secureString",
+			"metadata": "Secure string for 'credential' of 'GithubConnStorage'"
+		},
+		"RemoteServer_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'RemoteServer'"
+		},
+		"azuresynapsehacklinkedServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'azuresynapsehacklinkedServer'"
+		},
+		"uiap-synapse-uat1-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'uiap-synapse-uat1-WorkspaceDefaultSqlServer'"
+		},
+		"uiap-synapse-workspace-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'uiap-synapse-workspace-WorkspaceDefaultSqlServer'"
+		},
+		"FileDemoServer_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "\\\\192.10.1.11\\Shares\\Fileshare\\Knowledge Base\\Nanthakumar\\Hackathon Data"
+		},
+		"FileDemoServer_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "nanthakumar.j@ubtiinc.com"
+		},
+		"GithubConnStorage_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "jjnanthakumar"
+		},
+		"RemoteServer_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "\\\\192.10.1.11\\Shares\\Fileshare\\Knowledge Base\\Nanthakumar\\Hackathon Data"
+		},
+		"RemoteServer_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "nanthakumar.j@ubtiinc.com"
+		},
+		"uiap-synapse-uat1-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://synaselakeuat1.dfs.core.windows.net"
+		},
+		"uiap-synapse-workspace-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://uiapsynapselake.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/azuresynapsehack-sqlpipe')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "\n\nSELECT TOP 10\n\t\n\tCFD.claim_form_detail_code\t\t\tAS 'ClaimFIRNo'\n,\tCFD.injury_Name\t\t\t\t\t\tAS 'Injury'\n,\tCFD.isCashless\t\t\t\t\t\tAS 'ClaimType'\n,\tCFD.Claim_type_Code\t\t\t\t\tAS 'ClaimCategory'\n,\tCFD.billed\t\t\t\t\t\t\tAS 'AmountBilled'\n,\tCFD.net\t\t\t\t\t\t\t\tAS 'AmountNet'\n,\tCFD.Amount_paid\t\t\t\t\t\tAS 'AmountPaid'\n,\tCFD.Dr_name\t\t\t\t\t\t\tAS 'DoctorName'\n,\tCFD.Dr_City\t\t\t\t\t\t\tAS 'DoctorCity'\n,\tCFD.claim_form_detail_id\t\t\tAS 'ClaimFormDetailId'\n,\tCFD.claim_detail_id\t\t\t\t\tAS 'IntimationId'\n,\tCFD.hosp_id\t\t\t\t\t\t\tAS 'HospitalId'\n,\tCFD.claim_status_id\t\t\t\t\tAS 'ClaimStatusId'\n,\tCFD.place_of_service_id\t\t\t\tAs 'PlaceofServiceId' \n,\tCFD.date_service\t\t\t\t\tAS 'DateofService'\n,\tCFD.date_paid\t\t\t\t\t\tAS 'DatePaid'\n,\tCFD.date_received\t\t\t\t\tAS 'DateReceived'\n,\tCFD.date_of_Admit\t\t\t\t\tAS 'DateofAdmit'\n,\tCFD.injury_sustained_date\t\t\tAS 'DateofInjury' \n,\tCFD.document_dated\t\t\t\t\tAS 'DateofDocumentation'\n,\tCFD.date_of_Discharge\t\t\t\tAS 'DateofDischarge'\n,\tCFD.date_modified\t\t\t\t\tAS 'DateModified'\n,\tCFD.workflow_current_sequence_id\tAS 'WorkflowSequenceId'\n,\tCFD.member_detail_id\t\t\t\tAS 'MemberDetailId'\n,\tCFD.Class_of_Accommodation\t\t\tAS 'ClassofAccommodation'\n,\tCFD.Type_of_Hospitalization\t\t\tAS 'HospitalizationType'\n,\tE.name\t\t\t\t\t\t\t\tAS 'Corporate'\n,\tCFD.claim_form_detail_id\t\t\tAS 'ClaimId'\n\nFROM claim_form_details CFD\nINNER JOIN Member_details_tmp MDT ON MDT.member_detail_id = CFD.member_detail_id\nLEFT OUTER JOIN employers E ON E.employer_id = MDT.employer_id\nWHERE \n\tISNULL(CFD.parent_claim_form_id,0) <> 0 ",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "SqlPoolSink",
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "azuresynapsehackds",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "azuresynapsehackDSQL",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-05-05T05:09:03Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/azuresynapsehackds')]",
+				"[concat(variables('workspaceId'), '/datasets/azuresynapsehackDSQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/azuresynapsehackDSQL')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "sampleClaims"
+				},
+				"sqlPool": {
+					"referenceName": "uiapsynapsesqlpoolH",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/uiapsynapsesqlpoolH')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/azuresynapsehackds')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "azuresynapsehacklinkedServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/azuresynapsehacklinkedServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/FileDemoServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('FileDemoServer_properties_typeProperties_host')]",
+					"userId": "[parameters('FileDemoServer_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('FileDemoServer_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IntegrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/IntegrationRuntime1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/GithubConnStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "GitHub",
+				"typeProperties": {
+					"username": "[parameters('GithubConnStorage_properties_typeProperties_username')]",
+					"credential": {
+						"type": "SecureString",
+						"value": "[parameters('GithubConnStorage_credential')]"
+					},
+					"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlVJQVAtU1lOQVBTRS1XT1JLU1BBQ0VfNzAzMGJmM2MtYTNlMi00NDRlLTk5MWYtYTQ2MTg2ODNhNTQxIg0KfQ=="
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/RemoteServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('RemoteServer_properties_typeProperties_host')]",
+					"userId": "[parameters('RemoteServer_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('RemoteServer_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IntegrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/IntegrationRuntime1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/azuresynapsehacklinkedServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('azuresynapsehacklinkedServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "IntegrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/IntegrationRuntime1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/uiap-synapse-uat1-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('uiap-synapse-uat1-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/uiap-synapse-uat1-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('uiap-synapse-uat1-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/uiap-synapse-workspace-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('uiap-synapse-workspace-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/uiap-synapse-workspace-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('uiap-synapse-workspace-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/IntegrationRuntime1')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (50) [ClaimFIRNo]\n,[Injury]\n,[ClaimType]\n,[ClaimCategory]\n,[AmountBilled]\n,[AmountNet]\n,[AmountPaid]\n,[DoctorName]\n,[DoctorCity]\n,[ClaimFormDetailId]\n,[IntimationId]\n,[HospitalId]\n,[ClaimStatusId]\n,[PlaceofServiceId]\n,[DateofService]\n,[DatePaid]\n,[DateReceived]\n,[DateofAdmit]\n,[DateofInjury]\n,[DateofDocumentation]\n,[DateofDischarge]\n,[DateModified]\n,[WorkflowSequenceId]\n,[MemberDetailId]\n,[ClassofAccommodation]\n,[HospitalizationType]\n,[Corporate]\n,[ClaimId]\n FROM [dbo].[sampleClaims]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "uiapsynapsesqlpoolH",
+						"databaseName": "uiapsynapsesqlpoolH"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1_Copy1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": " SELECT claimcategory, sum(AmountPaid) as AmountPaid\n FROM [dbo].[sampleClaims] t \n GROUP by claimcategory\n \n  SELECT \n    case when  ClaimType = 0 \n            then 'Reimbursement' \n            else 'Cashless' \n    end as ClaimType , \n  sum(AmountPaid) as AmountPaid\n FROM [dbo].[sampleClaims] t \n GROUP by ClaimType\n ",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "uiapsynapsesqlpoolH",
+						"databaseName": "uiapsynapsesqlpoolH"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE TABLE [dbo].[ClaimSummary]\n(\n    claimind int \n    ,claimamt DECIMAL(9,2)\n    , claimtype VARCHAR(10)\n    ,memberdetailid int\n)\n \nGO\n\nINSERT INTO Claimsummary\nselect 1 , 100,'C',101\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "uiapsynapsesqlpoolH",
+						"databaseName": "uiapsynapsesqlpoolH"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"language_info": {
+						"name": "scala"
+					}
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"%%spark\n",
+							"val df = spark.read.sqlanalytics(\"uiapsynapsesqlpoolH.dbo.sampleClaims\") \n",
+							"df.write.mode(\"overwrite\").saveAsTable(\"default.t1\")"
+						],
+						"attachments": null,
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 2')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"language_info": {
+						"name": "python"
+					}
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"print(\"Development\")\n",
+							"print(\"Hello\")"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 3')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"language_info": {
+						"name": "python"
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"print(\"From Main branch.\")"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/uiapsynapsesqlpoolH')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"restorePointInTime": "0001-01-01T00:00:00",
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "centralindia"
+		}
+	]
+}
