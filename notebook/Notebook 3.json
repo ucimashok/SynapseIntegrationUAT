@@ -19,15 +19,15 @@
 			"saveOutput": true,
 			"language_info": {
 				"name": "python"
-			}
+			},
+			"sessionKeepAliveTimeout": 30
 		},
 		"cells": [
 			{
 				"cell_type": "code",
 				"source": [
-					"print(\"From Main branch.(Nanthakumar J J)\")"
+					"print(\"From Main branch.\")"
 				],
-				"attachments": null,
 				"execution_count": null
 			}
 		]
