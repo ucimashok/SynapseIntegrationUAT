@@ -127,15 +127,9 @@
 				"type": "SqlServer",
 				"typeProperties": {
 					"connectionString": "[parameters('azuresynapsehacklinkedServer_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "IntegrationRuntime1",
-					"type": "IntegrationRuntimeReference"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/IntegrationRuntime1')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/uiap-synapse-workspace-WorkspaceDefaultSqlServer')]",
@@ -200,16 +194,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/IntegrationRuntime1')]",
-			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
 			"type": "Microsoft.Synapse/workspaces/credentials",
 			"apiVersion": "2019-06-01-preview",
@@ -266,6 +250,26 @@
 			"properties": {
 				"content": {
 					"query": "CREATE TABLE [dbo].[ClaimSummary]\n(\n    claimind int \n    ,claimamt DECIMAL(9,2)\n    , claimtype VARCHAR(10)\n    ,memberdetailid int\n)\n \nGO\n\nINSERT INTO Claimsummary\nselect 1 , 100,'C',101\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "uiapsynapsesqlpoolH",
+						"databaseName": "uiapsynapsesqlpoolH"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 3')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE TABLE [dbo].[ClaimSummary1]\n(\n    claimind int \n    ,claimamt DECIMAL(9,2)\n    , claimtype VARCHAR(10)\n    ,memberdetailid int\n)\n \nGO\n\nINSERT INTO Claimsummary1\nselect 1 , 100,'C',101\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -382,13 +386,11 @@
 					"saveOutput": true,
 					"language_info": {
 						"name": "python"
-					},
-					"sessionKeepAliveTimeout": 30
+					}
 				},
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"print(\"From Main branch.\")"
 						],
