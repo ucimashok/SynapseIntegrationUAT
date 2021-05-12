@@ -1,0 +1,17 @@
+{
+	"name": "CreateSchema",
+	"properties": {
+		"content": {
+			"query": "CREATE SCHEMA Load",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "uiapsynapsesqlpoolH",
+				"databaseName": "uiapsynapsesqlpoolH"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
