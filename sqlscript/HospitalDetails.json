@@ -1,0 +1,17 @@
+{
+	"name": "HospitalDetails",
+	"properties": {
+		"content": {
+			"query": "/****** Object:  Table [Load].[HospitalDetails]    Script Date: 10-05-2021 14:18:01 ******/\nIF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Load].[HospitalDetails]') AND type in (N'U'))\nDROP TABLE [Load].[HospitalDetails]\nGO\n\n/****** Object:  Table [Load].[HospitalDetails]    Script Date: 10-05-2021 14:18:01 ******/\nSET ANSI_NULLS ON\nGO\n\nSET QUOTED_IDENTIFIER ON\nGO\n\nCREATE TABLE [Load].[HospitalDetails]\n(\n\t[HospitalId] [int] NOT NULL,\n\t[HospitalCode] [varchar](30) NULL,\n\t[HospitalName] [varchar](100) NULL,\n\t[IsSpecialist] [bit] NULL,\n\t[IsReferringProvider] [bit] NULL,\n\t[ProviderTypeId] [int] NULL,\n\t[ProviderCity] [varchar](50) NULL,\n\t[ProviderState] [varchar](100) NULL,\n\t[ProviderCountry] [varchar](100) NULL\n)\nWITH\n(\n\tDISTRIBUTION = HASH ( [HospitalId] ),\n\tCLUSTERED COLUMNSTORE INDEX\n)\nGO\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "uiapsynapsesqlpoolH",
+				"databaseName": "uiapsynapsesqlpoolH"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
